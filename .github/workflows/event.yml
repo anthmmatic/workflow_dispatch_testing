@@ -9,6 +9,7 @@ jobs:
     outputs:
       has-tag: ${{ steps.check.outputs.flag }}
     steps:
+      - uses: actions/checkout@v4
       - id: check
         run: |
           TAGS=$(git tag --points-at ${{ github.head_ref || github.sha }})
