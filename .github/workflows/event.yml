@@ -4,7 +4,15 @@ on:
   pull_request:
 
 jobs:
-  job-name:
+  check-for-tag:
     runs-on: ubuntu-latest
+    outputs:
+      has-tag: ${{ steps.check.outputs.flag }}
     steps:
-      - run: echo '${{ toJSON(github.event) }}'
+      - id: check
+        run: |
+          TAGS=$(git tag --points-at ${{ github.head_ref || github.sha }})
+          echo $TAGS
+          if [ -z "$TAGS" ]; then
+            echo "no tags present"
+          fi
