@@ -1,27 +1,29 @@
 on:
-  workflow_dispatch:
   push:
     branches: [ main ]
-  pull_request:
 
-jobs:
-  output_event:
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "${{ toJSON(github.event) }}"
-      
+jobs:      
   check-for-tag:
     runs-on: ubuntu-latest
     outputs:
-      has-tag: ${{ steps.check.outputs.flag }}
+      tagged: ${{ steps.check.outputs.flag }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - id: check
+        env:
+          FLAG: true
         run: |
           TAGS=$(git tag --points-at ${{ github.sha }})
-          echo $TAGS
           if [ -z "$TAGS" ]; then
-            echo "no tags present"
+            FLAG=false
           fi
+          echo "flag=$FLAG" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: [ check-for-tag ]
+    runs-on: ubuntu-latest
+    if: needs.check-for-tag.outputs.has-tag
+    steps:
+      - run: echo "done"
