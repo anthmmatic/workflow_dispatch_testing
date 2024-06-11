@@ -24,6 +24,6 @@ jobs:
   build:
     needs: [ check-for-tag ]
     runs-on: ubuntu-latest
-    if: needs.check-for-tag.outputs.has-tag
+    if: needs.check-for-tag.outputs.tagged
     steps:
       - run: echo "done"
