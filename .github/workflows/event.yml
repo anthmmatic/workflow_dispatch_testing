@@ -1,0 +1,27 @@
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  output_event:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "${{ toJSON(github.event) }}"
+      
+  check-for-tag:
+    runs-on: ubuntu-latest
+    outputs:
+      has-tag: ${{ steps.check.outputs.flag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: check
+        run: |
+          TAGS=$(git tag --points-at ${{ github.head_ref || github.sha }})
+          echo $TAGS
+          if [ -z "$TAGS" ]; then
+            echo "no tags present"
+          fi
