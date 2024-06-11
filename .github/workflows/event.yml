@@ -23,6 +23,6 @@ jobs:
   build:
     needs: [ check-for-tag ]
     runs-on: ubuntu-latest
-    if: needs.check-for-tag.outputs.tagged
+    if: needs.check-for-tag.outputs.tagged == true
     steps:
       - run: echo "done"
