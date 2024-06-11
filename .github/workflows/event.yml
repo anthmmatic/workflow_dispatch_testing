@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 0
       - id: check
         run: |
-          TAGS=$(git tag --points-at "${{ github.head_ref || github.sha }}")
+          TAGS=$(git tag --points-at ${{ github.sha }})
           echo $TAGS
           if [ -z "$TAGS" ]; then
             echo "no tags present"
