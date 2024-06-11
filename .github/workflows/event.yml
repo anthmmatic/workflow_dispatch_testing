@@ -16,9 +16,11 @@ jobs:
           FLAG: true
         run: |
           TAGS=$(git tag --points-at ${{ github.sha }})
+          echo $TAGS
           if [ -z "$TAGS" ]; then
             FLAG=false
           fi
+          echo $FLAG
           echo "flag=$FLAG" >> "$GITHUB_OUTPUT"
 
   build:
