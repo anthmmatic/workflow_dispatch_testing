@@ -5,6 +5,7 @@ on:
 jobs:      
   check-for-tag:
     runs-on: ubuntu-latest
+    continue-on-error: true
     outputs:
       tagged: ${{ steps.check.outputs.flag }}
     steps:
