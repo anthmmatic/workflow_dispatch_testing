@@ -6,22 +6,19 @@ jobs:
   check-for-tag:
     runs-on: ubuntu-latest
     outputs:
-      tagged: ${{ steps.check.outputs.flag }}
+      tagged: ${{ steps.check.outputs.flag || true }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - id: check
-        env:
-          FLAG: true
         run: |
           TAGS=$(git tag --points-at ${{ github.sha }})
           echo $TAGS
           if [ -z "$TAGS" ]; then
-            FLAG=false
+            echo "flag=false" >> "$GITHUB_OUTPUT"
           fi
-          echo $FLAG
-          echo "flag=$FLAG" >> "$GITHUB_OUTPUT"
+          
 
   build:
     needs: [ check-for-tag ]
