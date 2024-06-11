@@ -16,6 +16,7 @@ jobs:
           TAGS=$(git tag --points-at ${{ github.sha }})
           echo $TAGS
           if [ -z "$TAGS" ]; then
+            echo "no tags for commit"
             echo "flag=false" >> "$GITHUB_OUTPUT"
           fi
           
@@ -23,6 +24,6 @@ jobs:
   build:
     needs: [ check-for-tag ]
     runs-on: ubuntu-latest
-    if: needs.check-for-tag.outputs.tagged == true
+    if: needs.check-for-tag.outputs.tagged == 'true'
     steps:
       - run: echo "done"
